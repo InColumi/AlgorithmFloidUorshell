@@ -16,6 +16,8 @@ void ShowMatrix(int** matr, int size)
 	}
 }
 
+
+
 void ReadFromFile(int**& matr, int &size, string fileName)
 {
 	ifstream in;
@@ -40,10 +42,28 @@ void ReadFromFile(int**& matr, int &size, string fileName)
 		int row = 0;
 		for(int i = 0; i < line.size(); i++)
 		{
-			if(line[i] != ' ')
+			int endNumbmer = line.find(' ');
+			if(endNumbmer == -1)
 			{
-				matr[col][row++] = line[i] - '0';
+				endNumbmer = line.size();
 			}
+			string s;
+			for(int i = 0; i < endNumbmer; i++)
+			{
+				s.push_back(line[i]);
+			}
+			matr[col][row++] = stoi(s);
+			string newLine;
+			for(int i = endNumbmer + 1; i < line.size(); i++)
+			{
+				newLine.push_back(line[i]);
+			}
+			line = newLine;
+			if(line.size() == 1)
+			{
+				matr[col][row++] = stoi(line);
+			}
+			i = 0;
 		}
 		++col;
 	}
@@ -81,10 +101,38 @@ int main()
 	setlocale(LC_ALL, "Rus");
 	int size;
 	int** matr;
+
 	ReadFromFile(matr, size, "matrix.txt");
 	ShowMatrix(matr, size);
+
 	cout << "Ответ:" << endl;
 	Algorithm(matr, size);
 	ShowMatrix(matr, size);
 	return 0;
 }
+
+// Матрицы для тестов
+
+//3
+//0 9 2
+//1 0 4
+//2 4 0
+//ответ
+//0 6 2
+//1 0 3
+//2 4 0
+
+//6
+//0 10 18 8 31 20
+//10 0 16 9 21 21
+//26 16 0 25 37 15
+//7 9 25 0 30 12
+//64 54 38 63 0 23
+//41 31 15 40 23 0
+//ответ
+//0 10 18 8 31 20
+//10 0 16 9 21 21
+//26 16 0 25 37 15
+//7 9 25 0 30 12
+//64 54 38 63 0 23
+//41 31 15 40 23 0
